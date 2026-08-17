@@ -1,0 +1,80 @@
+/* Base Map Fixes */
+#map {
+    width: 100%;
+    height: 100%;
+    background-color: #e5e3df; /* Map background placeholder color */
+}
+
+/* Custom Scrollbar for Sidebar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 20px;
+}
+
+/* Tool Buttons Styling */
+.tool-btn {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+.tool-btn.active {
+    background-color: #f0f8ff; /* Light blue matching screenshot */
+    border-color: #93c5fd;
+    color: #1e3a8a;
+    box-shadow: 0 0 0 1px #93c5fd inset;
+}
+.tool-btn.active .icon-color {
+    color: #2563eb;
+}
+
+/* Unit Chips Styling */
+.unit-chip {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    background-color: #ffffff;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.unit-chip:hover {
+    background-color: #f8fafc;
+}
+.unit-chip.active {
+    background-color: #eff6ff;
+    border-color: #93c5fd;
+    color: #1e40af;
+}
+
+/* Custom Leaflet Markers & Labels (Matching Image) */
+.custom-vertex-marker {
+    background: transparent;
+    border: none;
+}
+.custom-vertex-marker div {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.custom-map-label {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+/* Hide default leaflet zoom controls since we built custom ones */
+.leaflet-control-zoom {
+    display: none !important;
+}
+
+/* Leaflet attribution adjustment */
+.leaflet-control-attribution {
+    font-size: 10px !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    padding: 0 5px !important;
+}
