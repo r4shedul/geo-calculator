@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geo-Calculator | Measure Distances, Areas, Routes & Land</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Geo-Calculator | By Rashedul Islam</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -18,82 +18,79 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-[#f0f4f8] font-sans text-gray-800 antialiased h-screen flex flex-col overflow-hidden relative">
+<body class="bg-[#eef2f6] font-sans text-gray-800 antialiased h-screen flex flex-col overflow-hidden relative">
 
-    <!-- Desktop Background Header (Hidden on Mobile) -->
-    <header class="hidden md:flex w-full max-w-[1300px] mx-auto items-center justify-center relative py-6 shrink-0 z-0">
-        <div class="absolute left-4 bg-white text-gray-900 font-extrabold text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">G</div>
+    <!-- Desktop Header -->
+    <header class="hidden md:flex w-full max-w-[1300px] mx-auto items-center justify-center relative py-5 shrink-0 z-0">
+        <div class="absolute left-4 glass-panel text-blue-600 font-black text-2xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm border border-white/80">G</div>
         <div class="text-center">
             <h1 class="text-3xl font-extrabold text-gray-900 leading-tight">Geo-Calculator</h1>
-            <p class="text-gray-600 mt-1 font-medium text-sm">Measure distances, areas, routes & land</p>
+            <p class="text-gray-700 mt-0.5 font-semibold text-xs tracking-wide">Measure distances, areas, routes & land • Developed by <span class="text-blue-600">Rashedul Islam</span></p>
         </div>
     </header>
 
     <!-- Main App Container -->
-    <div class="w-full h-full md:max-w-[1300px] md:mx-auto md:mb-8 md:h-auto md:flex-1 glass-panel md:rounded-[2rem] md:shadow-2xl flex flex-col md:flex-row overflow-hidden md:border border-white/60 relative z-10">
+    <div class="w-full h-full md:max-w-[1300px] md:mx-auto md:mb-6 md:h-auto md:flex-1 flex flex-col md:flex-row overflow-hidden md:rounded-3xl md:shadow-2xl md:border border-white/60 relative z-10">
         
         <!-- Sidebar / Control Panel (Bottom Sheet on Mobile) -->
-        <aside id="sidebar" class="absolute bottom-0 left-0 right-0 w-full glass-panel rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.12)] z-[2000] flex flex-col transition-transform duration-300 max-h-[75vh] 
-                    md:relative md:w-[400px] md:h-full md:max-h-none md:rounded-none md:shadow-none md:border-r md:border-gray-200/60">
+        <aside id="sidebar" class="absolute bottom-0 left-0 right-0 w-full glass-panel rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.15)] z-[2000] flex flex-col transition-transform duration-300 max-h-[80vh] 
+                    md:relative md:w-[390px] md:h-full md:max-h-none md:rounded-none md:shadow-none md:border-r md:border-white/50">
             
-            <!-- Mobile Header & Drag Handle -->
-            <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100/60 md:hidden glass-panel rounded-t-3xl sticky top-0 z-10">
-                <h2 class="font-bold text-gray-900 text-[17px]">Measurement Tools</h2>
-                <button id="close-sidebar" class="text-gray-500 hover:text-gray-700 p-1 bg-gray-100/80 rounded-full w-8 h-8 flex items-center justify-center transition">
+            <!-- Mobile Header & Close Button -->
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-200/40 md:hidden glass-panel rounded-t-3xl sticky top-0 z-10">
+                <div>
+                    <h2 class="font-bold text-gray-900 text-base">Measurement Tools</h2>
+                    <p class="text-[10px] text-gray-600 font-medium">Geo-Calculator by Rashedul Islam</p>
+                </div>
+                <button id="close-sidebar" class="text-gray-600 hover:text-gray-900 p-1.5 bg-white/60 rounded-full w-8 h-8 flex items-center justify-center transition border border-gray-200/50">
                     <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
             </div>
 
-            <div class="overflow-y-auto p-4 md:p-5 flex flex-col gap-4 custom-scrollbar flex-1 pb-10 md:pb-5">
+            <div class="overflow-y-auto p-4 md:p-5 flex flex-col gap-4 custom-scrollbar flex-1 pb-12 md:pb-5">
                 
                 <!-- Measurement Tools Section -->
                 <section class="order-1">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-gray-800 mb-3 hidden md:block">Measurement Tools</h2>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-gray-800 mb-2.5 hidden md:block">Measurement Tools</h2>
                     <div class="grid grid-cols-5 gap-1.5 md:gap-2">
-                        <button id="btn-distance" class="tool-btn active flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/80 transition hover:bg-blue-50 text-center gap-1.5">
-                            <i class="fa-solid fa-share-nodes text-[16px] text-gray-500 icon-color"></i>
+                        <button id="btn-distance" class="tool-btn active flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/70 transition hover:bg-blue-50 text-center gap-1.5">
+                            <i class="fa-solid fa-share-nodes text-[15px] text-gray-500 icon-color"></i>
                             <span class="leading-tight">Distance</span>
                         </button>
-                        <button id="btn-area" class="tool-btn flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/80 transition hover:bg-blue-50 text-center gap-1.5">
-                            <i class="fa-solid fa-draw-polygon text-[16px] text-gray-500 icon-color"></i>
+                        <button id="btn-area" class="tool-btn flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/70 transition hover:bg-blue-50 text-center gap-1.5">
+                            <i class="fa-solid fa-draw-polygon text-[15px] text-gray-500 icon-color"></i>
                             <span class="leading-tight">Area</span>
                         </button>
-                        <button id="btn-perimeter" class="tool-btn flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/80 transition hover:bg-blue-50 text-center gap-1.5">
-                            <i class="fa-solid fa-arrows-rotate text-[16px] text-gray-500 icon-color"></i>
+                        <button id="btn-perimeter" class="tool-btn flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/70 transition hover:bg-blue-50 text-center gap-1.5">
+                            <i class="fa-solid fa-arrows-rotate text-[15px] text-gray-500 icon-color"></i>
                             <span class="leading-tight">Perimeter/<br>Loop</span>
                         </button>
-                        <button id="btn-road" class="tool-btn flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/80 transition hover:bg-blue-50 text-center gap-1.5">
-                            <i class="fa-solid fa-road text-[16px] text-gray-500 icon-color"></i>
+                        <button id="btn-road" class="tool-btn flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/70 transition hover:bg-blue-50 text-center gap-1.5">
+                            <i class="fa-solid fa-road text-[15px] text-gray-500 icon-color"></i>
                             <span class="leading-tight">Road<br>Distance</span>
                         </button>
-                        <button id="btn-gps" class="tool-btn flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/80 transition hover:bg-blue-50 text-center gap-1.5">
-                            <i class="fa-solid fa-location-crosshairs text-[16px] text-gray-500 icon-color"></i>
+                        <button id="btn-gps" class="tool-btn flex flex-col items-center justify-center py-2.5 px-1 rounded-xl text-[10px] md:text-xs font-semibold border border-gray-200/80 bg-white/70 transition hover:bg-blue-50 text-center gap-1.5">
+                            <i class="fa-solid fa-location-crosshairs text-[15px] text-gray-500 icon-color"></i>
                             <span class="leading-tight">GPS<br>Tracking</span>
                         </button>
                     </div>
                 </section>
 
-                <!-- Mobile Status Indicator -->
-                <div class="md:hidden order-2 flex items-center gap-2 text-[13px] text-gray-800 font-medium py-1">
-                    <i class="fa-solid fa-hand-pointer text-gray-500"></i>
-                    <span>Start measurement in progress</span>
-                </div>
-
                 <!-- Location Tools Section -->
                 <section class="order-5 md:order-2">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-gray-800 mb-3 hidden md:block">Location Tools</h2>
-                    <div class="space-y-2.5">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-gray-800 mb-2.5 hidden md:block">Location Tools</h2>
+                    <div class="space-y-2">
                         <div class="relative hidden md:block">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-sm"></i>
-                            <input type="text" id="search-input" placeholder="Search a place..." class="w-full pl-9 pr-4 py-2 text-sm bg-white/90 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <input type="text" id="search-input" placeholder="Search a place..." class="w-full pl-9 pr-4 py-2 text-sm bg-white/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
-                        <div class="grid grid-cols-2 gap-2 md:gap-3">
-                            <button id="btn-my-location" class="flex items-center justify-center gap-2 py-2 px-3 bg-white/80 border border-gray-200/80 rounded-xl text-[13px] font-semibold text-gray-700 hover:bg-gray-50 transition">
-                                <i class="fa-regular fa-paper-plane text-gray-500"></i>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="btn-my-location" class="flex items-center justify-center gap-2 py-2 px-3 bg-white/70 border border-gray-200/80 rounded-xl text-[12px] font-semibold text-gray-800 hover:bg-white transition">
+                                <i class="fa-regular fa-paper-plane text-blue-600"></i>
                                 <span>My Location</span>
                             </button>
-                            <button id="btn-reset-map" class="flex items-center justify-center gap-2 py-2 px-3 bg-white/80 border border-gray-200/80 rounded-xl text-[13px] font-semibold text-gray-700 hover:bg-gray-50 transition">
-                                <i class="fa-solid fa-arrow-rotate-left text-gray-500"></i>
+                            <button id="btn-reset-map" class="flex items-center justify-center gap-2 py-2 px-3 bg-white/70 border border-gray-200/80 rounded-xl text-[12px] font-semibold text-gray-800 hover:bg-white transition">
+                                <i class="fa-solid fa-arrow-rotate-left text-gray-600"></i>
                                 <span>Reset Map</span>
                             </button>
                         </div>
@@ -102,70 +99,71 @@
 
                 <!-- Calculated Results Section -->
                 <section class="order-3 glass-card p-4 rounded-2xl border border-blue-100/60 flex flex-col justify-between">
-                    <div class="flex justify-between items-center md:hidden mb-2">
-                        <h2 class="text-sm font-bold text-gray-800">Measurement</h2>
-                        <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
+                    <div class="flex justify-between items-center md:hidden mb-1">
+                        <h2 class="text-xs font-bold text-gray-800 uppercase tracking-wider">Measurement Result</h2>
                     </div>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 hidden md:block">Calculated Results</h2>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-gray-600 mb-1.5 hidden md:block">Calculated Results</h2>
                     
                     <div id="results-display" class="my-1">
-                        <div class="text-lg font-bold text-gray-900" id="primary-result">Total Area: 0.00 শতাংশ</div>
-                        <div class="flex items-center flex-wrap mt-1.5 text-[13px]" id="secondary-results">
-                            <span class="text-gray-800 font-medium">0 sq ft</span>
-                            <span class="text-gray-800 font-medium ml-4">0 m²</span>
-                            <span class="text-gray-800 font-medium ml-4">0.00 acre</span>
+                        <div class="text-base md:text-lg font-extrabold text-gray-900" id="primary-result">Total Area: 0.00 শতাংশ</div>
+                        <div class="flex items-center flex-wrap mt-1 text-[12px] md:text-[13px]" id="secondary-results">
+                            <span class="text-gray-800 font-semibold">0 sq ft</span>
+                            <span class="text-gray-800 font-semibold ml-3">0 m²</span>
+                            <span class="text-gray-800 font-semibold ml-3">0.00 acre</span>
                         </div>
                     </div>
 
                     <!-- Additional controls -->
                     <div id="loop-control" class="hidden my-2 pt-2 border-t border-blue-100/50 flex items-center justify-between">
-                        <label class="text-xs font-bold text-gray-600">Laps / Rounds:</label>
+                        <label class="text-xs font-bold text-gray-700">Laps / Rounds:</label>
                         <input type="number" id="loop-count" value="1" min="1" max="100" class="w-16 px-2 py-1 text-xs bg-white border border-gray-300 rounded-lg text-center">
                     </div>
                     <div id="gps-controls" class="hidden my-2 pt-2 border-t border-blue-100/50 flex gap-2">
-                        <button id="btn-gps-toggle" class="flex-1 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition">
+                        <button id="btn-gps-toggle" class="flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition">
                             Start Tracking
                         </button>
                     </div>
 
                     <!-- Unit Selector Chips -->
-                    <div id="unit-chips" class="flex flex-wrap gap-1.5 mt-4">
+                    <div id="unit-chips" class="flex flex-wrap gap-1.5 mt-3">
                         <!-- Dynamic units injected via JavaScript -->
                     </div>
                 </section>
 
                 <!-- Editing Controls -->
                 <section class="order-4">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-gray-800 mb-3 hidden md:block">Editing Controls</h2>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-gray-800 mb-2.5 hidden md:block">Editing Controls</h2>
                     <div class="grid grid-cols-3 gap-2">
-                        <button id="btn-undo" class="flex flex-col items-center justify-center py-2.5 px-1 bg-white/80 border border-gray-200/80 rounded-xl text-[11px] font-semibold text-gray-700 hover:bg-gray-50 transition text-center gap-1.5">
-                            <i class="fa-solid fa-rotate-left text-gray-500 text-[15px]"></i>
+                        <button id="btn-undo" class="flex flex-col items-center justify-center py-2.5 px-1 bg-white/70 border border-gray-200/80 rounded-xl text-[11px] font-semibold text-gray-800 hover:bg-white transition text-center gap-1">
+                            <i class="fa-solid fa-rotate-left text-blue-600 text-[14px]"></i>
                             <span>Undo Last<br>Point</span>
                         </button>
-                        <button id="btn-clear" class="flex flex-col items-center justify-center py-2.5 px-1 bg-white/80 border border-gray-200/80 rounded-xl text-[11px] font-semibold text-gray-700 hover:bg-gray-50 transition text-center gap-1.5">
-                            <i class="fa-regular fa-trash-can text-gray-500 text-[15px]"></i>
+                        <button id="btn-clear" class="flex flex-col items-center justify-center py-2.5 px-1 bg-white/70 border border-gray-200/80 rounded-xl text-[11px] font-semibold text-red-600 hover:bg-red-50/50 transition text-center gap-1">
+                            <i class="fa-regular fa-trash-can text-[14px]"></i>
                             <span>Clear<br>Measurement</span>
                         </button>
-                        <button id="btn-finish" class="flex flex-col items-center justify-center py-2.5 px-1 bg-white/80 border border-gray-200/80 rounded-xl text-[11px] font-semibold text-gray-700 hover:bg-gray-50 transition text-center gap-1.5">
-                            <i class="fa-solid fa-check text-gray-500 text-[15px]"></i>
+                        <button id="btn-finish" class="flex flex-col items-center justify-center py-2.5 px-1 bg-white/70 border border-gray-200/80 rounded-xl text-[11px] font-semibold text-emerald-700 hover:bg-emerald-50/50 transition text-center gap-1">
+                            <i class="fa-solid fa-check text-[14px]"></i>
                             <span>Finish<br>Measurement</span>
                         </button>
                     </div>
                 </section>
 
-                <!-- Google Logo Placeholder -->
-                <div class="order-5 py-2 hidden md:block">
-                    <span class="text-[15px] font-bold text-gray-400 tracking-tighter">Google</span>
-                </div>
+                <!-- Footer Copyright Section -->
+                <footer class="order-5 pt-3 pb-1 text-center border-t border-gray-200/50 mt-1">
+                    <p class="text-[11px] font-bold text-gray-800">Geo-Calculator</p>
+                    <p class="text-[10px] font-medium text-gray-600 mt-0.5">Designed & Developed by <span class="font-bold text-blue-600">Rashedul Islam</span></p>
+                    <p class="text-[9px] text-gray-500 mt-0.5">© 2026 Rashedul Islam. All Rights Reserved.</p>
+                </footer>
             </div>
         </aside>
 
-        <!-- Floating Mobile Quick Bar (When Sidebar is Closed) -->
-        <div id="mobile-floating-bar" class="md:hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[1000] hidden items-center gap-2">
-            <button id="btn-floating-undo" class="glass-panel text-gray-800 px-4 py-2.5 rounded-full shadow-2xl border border-white/80 font-bold text-xs flex items-center gap-1.5 active:scale-95 transition">
+        <!-- Floating Mobile Quick Bar (When Sidebar is Closed on Phone) -->
+        <div id="mobile-floating-bar" class="md:hidden hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[3000] items-center gap-2">
+            <button id="btn-floating-undo" class="glass-panel text-gray-900 px-4 py-2.5 rounded-full shadow-2xl border border-white/90 font-bold text-xs flex items-center gap-1.5 active:scale-95 transition cursor-pointer">
                 <i class="fa-solid fa-rotate-left text-blue-600"></i> Undo
             </button>
-            <button id="btn-show-tools" class="glass-panel text-gray-800 px-5 py-2.5 rounded-full shadow-2xl border border-white/80 font-bold text-xs flex items-center gap-2 active:scale-95 transition">
+            <button id="btn-show-tools" class="glass-panel text-gray-900 px-5 py-2.5 rounded-full shadow-2xl border border-white/90 font-bold text-xs flex items-center gap-2 active:scale-95 transition cursor-pointer">
                 <i class="fa-solid fa-sliders text-blue-600"></i> Tools
             </button>
         </div>
@@ -174,37 +172,37 @@
         <main class="flex-1 relative w-full h-full z-0 bg-[#e5e3df]">
             <div id="map" class="w-full h-full absolute inset-0 z-0"></div>
 
-            <!-- Mini Zoom Magnifier Box (Corner Loupe on Drag/Tap) -->
-            <div id="magnifier-box" class="hidden absolute top-4 left-4 z-[1000] w-28 h-28 md:w-36 md:h-36 rounded-2xl border-2 border-blue-600 shadow-2xl overflow-hidden bg-white pointer-events-none">
+            <!-- Mini Zoom Magnifier Box with Precise Center Target Point -->
+            <div id="magnifier-box" class="hidden absolute top-4 left-4 z-[3500] w-32 h-32 md:w-40 md:h-40 rounded-full border-3 border-blue-600 shadow-2xl overflow-hidden bg-white/90 pointer-events-none">
                 <div id="magnifier-map" class="w-full h-full"></div>
-                <!-- Center Target Crosshair -->
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                    <div class="w-2.5 h-2.5 border-2 border-red-500 rounded-full bg-red-500/40"></div>
-                    <div class="absolute w-4 h-0.5 bg-red-500"></div>
-                    <div class="absolute h-4 w-0.5 bg-red-500"></div>
+                <!-- Precision Center Indicator Point -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-[3510]">
+                    <div class="w-3.5 h-3.5 border-2 border-white rounded-full bg-red-600 shadow-md"></div>
+                    <div class="absolute w-6 h-0.5 bg-red-600/80"></div>
+                    <div class="absolute h-6 w-0.5 bg-red-600/80"></div>
                 </div>
             </div>
 
             <!-- Custom Floating Map Controls (Top Right) -->
-            <div class="absolute top-4 right-4 z-[1000] flex flex-col gap-3 items-end">
+            <div class="absolute top-4 right-4 z-[1000] flex flex-col gap-2.5 items-end">
                 <!-- Map/Sat Toggle -->
-                <div class="glass-panel rounded-lg shadow-md border border-white/60 p-1 flex items-center">
-                    <button id="btn-layer-map" class="px-3 py-1.5 text-xs font-bold rounded-md bg-white text-gray-800 shadow-sm border border-gray-200/50">Map</button>
-                    <button id="btn-layer-sat" class="px-3 py-1.5 text-xs font-bold rounded-md text-gray-600 hover:text-gray-900 transition">Satellite</button>
+                <div class="glass-panel rounded-xl shadow-lg border border-white/80 p-1 flex items-center">
+                    <button id="btn-layer-map" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-white/90 text-gray-900 shadow-sm border border-gray-200/50">Map</button>
+                    <button id="btn-layer-sat" class="px-3 py-1.5 text-xs font-bold rounded-lg text-gray-700 hover:text-gray-900 transition">Satellite</button>
                 </div>
 
                 <!-- Vertical Action Buttons -->
-                <div class="glass-panel rounded-lg shadow-md border border-white/60 flex flex-col w-[38px]">
-                    <button id="btn-fullscreen" class="h-[38px] text-gray-600 hover:text-gray-900 border-b border-gray-200/50 flex items-center justify-center transition" title="Fullscreen"><i class="fa-solid fa-expand text-sm"></i></button>
-                    <button id="btn-locate" class="h-[38px] text-gray-600 hover:text-gray-900 border-b border-gray-200/50 flex items-center justify-center transition" title="Target"><i class="fa-solid fa-crosshairs text-sm"></i></button>
-                    <button id="btn-zoom-in" class="h-[38px] text-gray-600 hover:text-gray-900 border-b border-gray-200/50 flex items-center justify-center font-bold text-xl leading-none transition" title="Zoom In">+</button>
-                    <button id="btn-zoom-out" class="h-[38px] text-gray-600 hover:text-gray-900 flex items-center justify-center font-bold text-2xl leading-none transition" title="Zoom Out">−</button>
+                <div class="glass-panel rounded-xl shadow-lg border border-white/80 flex flex-col w-[38px]">
+                    <button id="btn-fullscreen" class="h-[38px] text-gray-700 hover:text-gray-900 border-b border-gray-200/40 flex items-center justify-center transition" title="Fullscreen"><i class="fa-solid fa-expand text-sm"></i></button>
+                    <button id="btn-locate" class="h-[38px] text-gray-700 hover:text-gray-900 border-b border-gray-200/40 flex items-center justify-center transition" title="Target"><i class="fa-solid fa-crosshairs text-sm"></i></button>
+                    <button id="btn-zoom-in" class="h-[38px] text-gray-700 hover:text-gray-900 border-b border-gray-200/40 flex items-center justify-center font-bold text-xl leading-none transition" title="Zoom In">+</button>
+                    <button id="btn-zoom-out" class="h-[38px] text-gray-700 hover:text-gray-900 flex items-center justify-center font-bold text-2xl leading-none transition" title="Zoom Out">−</button>
                 </div>
             </div>
             
-            <!-- Map Terms/Credits Placeholder -->
-            <div class="absolute bottom-1 right-1 z-[1000] text-[10px] text-gray-600 bg-white/70 px-1 rounded md:hidden">
-                Map data ©2026 Google
+            <!-- Map Copyright Footer Watermark -->
+            <div class="absolute bottom-1 right-1 z-[1000] text-[10px] font-semibold text-gray-700 bg-white/80 backdrop-blur-sm px-2 py-0.5 rounded shadow-sm">
+                Geo-Calculator © 2026 Rashedul Islam
             </div>
         </main>
     </div>
