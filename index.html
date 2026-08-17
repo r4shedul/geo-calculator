@@ -184,15 +184,15 @@
             </div>
 
             <!-- Custom Floating Map Controls (Top Right) -->
-            <div class="absolute top-4 right-4 z-[1000] flex flex-col gap-2.5 items-end">
+            <div class="absolute top-4 right-4 z-[1000] flex flex-col gap-2.5 items-end pointer-events-none">
                 <!-- Map/Sat Toggle -->
-                <div class="glass-panel rounded-xl shadow-lg border border-white/80 p-1 flex items-center">
+                <div class="glass-panel rounded-xl shadow-lg border border-white/80 p-1 flex items-center pointer-events-auto">
                     <button id="btn-layer-map" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-white/90 text-gray-900 shadow-sm border border-gray-200/50">Map</button>
                     <button id="btn-layer-sat" class="px-3 py-1.5 text-xs font-bold rounded-lg text-gray-700 hover:text-gray-900 transition">Satellite</button>
                 </div>
 
                 <!-- Vertical Action Buttons -->
-                <div class="glass-panel rounded-xl shadow-lg border border-white/80 flex flex-col w-[38px]">
+                <div class="glass-panel rounded-xl shadow-lg border border-white/80 flex flex-col w-[38px] pointer-events-auto">
                     <button id="btn-fullscreen" class="h-[38px] text-gray-700 hover:text-gray-900 border-b border-gray-200/40 flex items-center justify-center transition" title="Fullscreen"><i class="fa-solid fa-expand text-sm"></i></button>
                     <button id="btn-locate" class="h-[38px] text-gray-700 hover:text-gray-900 border-b border-gray-200/40 flex items-center justify-center transition" title="Target"><i class="fa-solid fa-crosshairs text-sm"></i></button>
                     <button id="btn-zoom-in" class="h-[38px] text-gray-700 hover:text-gray-900 border-b border-gray-200/40 flex items-center justify-center font-bold text-xl leading-none transition" title="Zoom In">+</button>
