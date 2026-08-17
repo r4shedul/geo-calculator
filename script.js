@@ -1,4 +1,4 @@
-// Map & State Management Variables
+// Geo-Calculator • Created & Developed by Rashedul Islam
 let map, miniMap;
 let baseLayers = {};
 let miniBaseLayers = {};
@@ -10,7 +10,7 @@ let activePolygon = null;
 let roadRouteLayer = null;
 let segmentLabels = [];
 
-// Unit Selection State
+// Unit Selection State per mode
 let activeUnit = {
     distance: 'Meter',
     area: 'শতাংশ / Decimal',
@@ -27,26 +27,27 @@ let gpsPolyline = null;
 let gpsStartTime = null;
 let totalGpsDistance = 0;
 
-// Initialize Leaflet Map and Mini Zoom Map
+// Initialize Leaflet Map and Mini Zoom Magnifier
 function initMap() {
     map = L.map('map', { 
         zoomControl: false, 
-        attributionControl: true 
+        attributionControl: true,
+        tap: true 
     }).setView([23.8103, 90.4125], 14);
 
-    // Standard Tile Layer
+    // Standard OpenStreetMap Tile Layer
     baseLayers.standard = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data © OpenStreetMap'
+        attribution: 'Geo-Calculator © 2026 Rashedul Islam'
     }).addTo(map);
 
     // Google Hybrid Satellite Layer
-    baseLayers.satellite = L.tileLayer('http://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+    baseLayers.satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
         maxZoom: 20,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-        attribution: 'Map data © Google'
+        attribution: 'Geo-Calculator © 2026 Rashedul Islam'
     });
 
-    // Initialize Corner Mini Magnifier Map
+    // Corner Mini Zoom Magnifier Map
     miniMap = L.map('magnifier-map', {
         zoomControl: false,
         attributionControl: false,
@@ -59,7 +60,7 @@ function initMap() {
     }).setView([23.8103, 90.4125], 18);
 
     miniBaseLayers.standard = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(miniMap);
-    miniBaseLayers.satellite = L.tileLayer('http://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+    miniBaseLayers.satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
         maxZoom: 20,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     });
@@ -67,23 +68,40 @@ function initMap() {
     map.on('click', handleMapClick);
 }
 
-// Custom Marker Icon
+// Custom Marker Icon with Red Border and White Center
 const customMarkerIcon = L.divIcon({
     className: 'custom-vertex-marker',
-    html: '<div style="width: 12px; height: 12px; background-color: #ffffff; border: 2px solid #ef4444; border-radius: 50%;"></div>',
-    iconSize: [12, 12],
-    iconAnchor: [6, 6]
+    html: '<div style="width: 14px; height: 14px; background-color: #ffffff; border: 2.5px solid #ef4444; border-radius: 50%;"></div>',
+    iconSize: [14, 14],
+    iconAnchor: [7, 7]
 });
 
-// Magnifier View Controls
+// Magnifier Position Controls
+function updateMagnifierSide(latlng) {
+    const box = document.getElementById('magnifier-box');
+    const rect = box.getBoundingClientRect();
+    const point = map.latLngToContainerPoint(latlng);
+
+    const boxWidth = rect.width || 128;
+    const boxHeight = rect.height || 128;
+    const margin = 16;  // matches the top-4 / left-4 offset (1rem)
+    const buffer = 30;  // flip a little before the finger/point actually reaches the box
+
+    const isUnderMagnifier = point.x < margin + boxWidth + buffer && point.y < margin + boxHeight + buffer;
+
+    box.classList.toggle('magnifier-right', isUnderMagnifier);
+}
+
 function showMagnifier(latlng) {
     const box = document.getElementById('magnifier-box');
     box.classList.remove('hidden');
+    updateMagnifierSide(latlng);
     miniMap.invalidateSize();
     miniMap.setView(latlng, Math.min(map.getZoom() + 4, 19), { animate: false });
 }
 
 function updateMagnifier(latlng) {
+    updateMagnifierSide(latlng);
     miniMap.setView(latlng, Math.min(map.getZoom() + 4, 19), { animate: false });
 }
 
@@ -91,7 +109,7 @@ function hideMagnifier() {
     document.getElementById('magnifier-box').classList.add('hidden');
 }
 
-// Handle User Map Clicks
+// Handle Map Clicks & Touch Points
 function handleMapClick(e) {
     if (currentMode === 'gps') return;
 
@@ -100,8 +118,9 @@ function handleMapClick(e) {
 
     const marker = L.marker(latlng, { icon: customMarkerIcon, draggable: true }).addTo(map);
     
-    // Attach Magnifier Listeners for Dragging
+    // Attach Drag and Touch Listeners for Mobile & PC Magnifier
     marker.on('dragstart', (evt) => {
+        if (map.dragging) map.dragging.disable();
         showMagnifier(evt.target.getLatLng());
     });
 
@@ -115,20 +134,39 @@ function handleMapClick(e) {
     });
 
     marker.on('dragend', () => {
+        if (map.dragging) map.dragging.enable();
         hideMagnifier();
+    });
+
+    // Touch events for Mobile Devices
+    marker.on('add', () => {
+        const iconEl = marker.getElement();
+        if (iconEl) {
+            iconEl.addEventListener('touchstart', (e) => {
+                showMagnifier(marker.getLatLng());
+            }, { passive: true });
+            
+            iconEl.addEventListener('touchmove', (e) => {
+                updateMagnifier(marker.getLatLng());
+            }, { passive: true });
+            
+            iconEl.addEventListener('touchend', () => {
+                hideMagnifier();
+            }, { passive: true });
+        }
     });
 
     markers.push(marker);
     updateMeasurements();
 }
 
-// Helper to draw black distance labels on segments
+// Draw segment distance labels
 function addSegmentLabel(p1, p2, text) {
     const midLat = (p1.lat + p2.lat) / 2;
     const midLng = (p1.lng + p2.lng) / 2;
     const icon = L.divIcon({
         className: 'custom-map-label',
-        html: `<div style="background: rgba(60, 64, 67, 0.9); color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 12px; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.3); transform: translate(-50%, -50%); pointer-events: none;">${text}</div>`,
+        html: `<div style="background: rgba(30, 41, 59, 0.88); color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 12px; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.3); transform: translate(-50%, -50%); pointer-events: none;">${text}</div>`,
         iconSize: [0, 0]
     });
     const marker = L.marker([midLat, midLng], { icon: icon, interactive: false }).addTo(map);
@@ -138,15 +176,15 @@ function addSegmentLabel(p1, p2, text) {
 function drawSegmentLabels(ptArray, connectLoop = false) {
     for (let i = 0; i < ptArray.length - 1; i++) {
         let dist = ptArray[i].distanceTo(ptArray[i + 1]);
-        addSegmentLabel(ptArray[i], ptArray[i + 1], `${dist.toFixed(3)} m`);
+        addSegmentLabel(ptArray[i], ptArray[i + 1], `${dist.toFixed(2)} m`);
     }
     if (connectLoop && ptArray.length > 2) {
         let dist = ptArray[ptArray.length - 1].distanceTo(ptArray[0]);
-        addSegmentLabel(ptArray[ptArray.length - 1], ptArray[0], `${dist.toFixed(3)} m`);
+        addSegmentLabel(ptArray[ptArray.length - 1], ptArray[0], `${dist.toFixed(2)} m`);
     }
 }
 
-// Clear drawn layers
+// Clear visual polyline & polygon overlays
 function clearVisualLayers() {
     if (activePolyline) map.removeLayer(activePolyline);
     if (activePolygon) map.removeLayer(activePolygon);
@@ -285,7 +323,7 @@ function renderRoadMode() {
 
                 if (roadRouteLayer) map.removeLayer(roadRouteLayer);
                 
-                roadRouteLayer = L.polyline(routeCoords, { color: '#3b82f6', weight: 5, opacity: 0.8 }).addTo(map);
+                roadRouteLayer = L.polyline(routeCoords, { color: '#3b82f6', weight: 5, opacity: 0.85 }).addTo(map);
 
                 const distMeters = route.distance;
                 const results = {
@@ -317,7 +355,7 @@ function toggleGpsTracking() {
 
         isGpsTracking = true;
         btn.innerText = "Stop Tracking";
-        btn.className = "flex-1 py-2 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 transition";
+        btn.className = "flex-1 py-2 bg-red-600 text-white rounded-xl text-xs font-bold hover:bg-red-700 transition";
         gpsPath = [];
         totalGpsDistance = 0;
         gpsStartTime = new Date();
@@ -355,7 +393,7 @@ function toggleGpsTracking() {
         isGpsTracking = false;
         navigator.geolocation.clearWatch(watchId);
         btn.innerText = "Start Tracking";
-        btn.className = "flex-1 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition";
+        btn.className = "flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition";
     }
 }
 
@@ -388,8 +426,8 @@ function displayResults(primary, secondaryArray) {
     
     if (secondaryArray && secondaryArray.length > 0) {
         secondaryArray.forEach((secText, idx) => {
-            const mlClass = idx === 0 ? '' : 'ml-4';
-            secContainer.innerHTML += `<span class="text-gray-800 font-medium ${mlClass}">${secText}</span>`;
+            const mlClass = idx === 0 ? '' : 'ml-3';
+            secContainer.innerHTML += `<span class="text-gray-800 font-semibold ${mlClass}">${secText}</span>`;
         });
     }
 }
@@ -432,9 +470,8 @@ function undoLastPoint() {
     updateMeasurements();
 }
 
-// App Event Listeners
+// Event Listeners Initialization
 function setupEventListeners() {
-    
     // Custom Map Controls
     document.getElementById('btn-zoom-in').addEventListener('click', () => map.zoomIn());
     document.getElementById('btn-zoom-out').addEventListener('click', () => map.zoomOut());
@@ -454,11 +491,11 @@ function setupEventListeners() {
         miniMap.removeLayer(miniBaseLayers.satellite);
         miniMap.addLayer(miniBaseLayers.standard);
 
-        e.target.classList.add('bg-white', 'text-gray-800', 'shadow-sm', 'border', 'border-gray-200/50');
-        e.target.classList.remove('text-gray-600');
+        e.target.classList.add('bg-white/90', 'text-gray-900', 'shadow-sm', 'border', 'border-gray-200/50');
+        e.target.classList.remove('text-gray-700');
         const satBtn = document.getElementById('btn-layer-sat');
-        satBtn.classList.remove('bg-white', 'text-gray-800', 'shadow-sm', 'border', 'border-gray-200/50');
-        satBtn.classList.add('text-gray-600');
+        satBtn.classList.remove('bg-white/90', 'text-gray-900', 'shadow-sm', 'border', 'border-gray-200/50');
+        satBtn.classList.add('text-gray-700');
     });
 
     document.getElementById('btn-layer-sat').addEventListener('click', (e) => {
@@ -467,11 +504,11 @@ function setupEventListeners() {
         miniMap.removeLayer(miniBaseLayers.standard);
         miniMap.addLayer(miniBaseLayers.satellite);
 
-        e.target.classList.add('bg-white', 'text-gray-800', 'shadow-sm', 'border', 'border-gray-200/50');
-        e.target.classList.remove('text-gray-600');
+        e.target.classList.add('bg-white/90', 'text-gray-900', 'shadow-sm', 'border', 'border-gray-200/50');
+        e.target.classList.remove('text-gray-700');
         const mapBtn = document.getElementById('btn-layer-map');
-        mapBtn.classList.remove('bg-white', 'text-gray-800', 'shadow-sm', 'border', 'border-gray-200/50');
-        mapBtn.classList.add('text-gray-600');
+        mapBtn.classList.remove('bg-white/90', 'text-gray-900', 'shadow-sm', 'border', 'border-gray-200/50');
+        mapBtn.classList.add('text-gray-700');
     });
 
     // Measurement Mode Switcher
@@ -499,7 +536,7 @@ function setupEventListeners() {
 
     document.getElementById('loop-count').addEventListener('input', updateMeasurements);
     
-    // Undo Buttons (Both panel undo & floating mobile undo)
+    // Undo Handlers
     document.getElementById('btn-undo').addEventListener('click', undoLastPoint);
     document.getElementById('btn-floating-undo').addEventListener('click', undoLastPoint);
     
@@ -523,7 +560,7 @@ function setupEventListeners() {
         setTimeout(() => {
             floatingBar.classList.remove('hidden');
             floatingBar.classList.add('flex');
-        }, 200);
+        }, 150);
     });
 
     document.getElementById('btn-show-tools').addEventListener('click', () => {
@@ -534,11 +571,10 @@ function setupEventListeners() {
 
     document.getElementById('btn-gps-toggle').addEventListener('click', toggleGpsTracking);
     
-    // Default mode initialization
     renderDistanceMode(); 
 }
 
-// Startup
+// App Initialization
 window.addEventListener('DOMContentLoaded', () => {
     initMap();
     setupEventListeners();
